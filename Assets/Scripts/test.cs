@@ -10,21 +10,18 @@ public class test : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        InputDecoder.CharacterList.Add(new Character("M", "Marcelo", Color.green, "Falopa.mp3"));
-        inputline = "M \"todas trolas\"";
+        InputDecoder.CharacterList.Add(new Character("M", "Coffee", Color.green, "Falopa.mp3"));
+        inputline = "Character(a, Alfonso, color=red, image=jadsj.jpg)";
+        InputDecoder.ParseInput(inputline);
+
+        inputline = "a \"todas trolas\"";
         InputDecoder.ParseInput(inputline);
 
         inputline = "show Sonic";
-        Debug.Log("AHORA QUIERO DECIR ESTO: " + inputline);
         InputDecoder.ParseInput(inputline);
 
     
 
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

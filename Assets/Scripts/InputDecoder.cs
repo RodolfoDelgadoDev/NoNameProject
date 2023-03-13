@@ -17,9 +17,20 @@ public class InputDecoder : MonoBehaviour
     /// </summary>
     public static List<Character> CharacterList = new List<Character>();
 
-    public Image sonicporfavoraparececonchudo;
-
+    
+    /// <summary>
+    /// Background variable to change the background image
+    /// </summary>
     private static GameObject BackGround = GameObject.Find("BackGround");
+
+
+
+    /// <summary>
+    /// Gets gameobject "UI_Elements"  
+    /// </summary>
+    public static GameObject InterfaceElements = GameObject.Find("UI_Elements");
+
+
 
     private static Image BackgroundImage = BackGround.GetComponent<Image>();
 
@@ -38,28 +49,26 @@ public class InputDecoder : MonoBehaviour
         string[] sepString = { " ", "'", "\"", "(", ")" };
         string[] args = stringToParse.Split(sepString, StringSplitOptions.RemoveEmptyEntries);
 
-        foreach(var arg in args)
-        {
-            Debug.Log(arg);
-        }
+        //foreach(var arg in args)
+        //{
+        //Debug.Log(arg);
+        //}
 
-        foreach(Character character in CharacterList)
-        {
+        foreach (Character character in CharacterList)
             if (args[0] == character.name)
                 SplitToSay(stringToParse, character);
-        }
+
 
         if (args[0] == "show")
-        {
             showImage(stringToParse);
-        }
 
         if (args[0] == "clearScr")
-        {
             ClearScreen();
-        }
+        if (args[0] == "Character")
+            CreateNewCharacter(stringToParse);
 
     }
+
 
 
     /// <summary>
@@ -97,7 +106,10 @@ public class InputDecoder : MonoBehaviour
     }
 
 
-
+    /// <summary>
+    /// showImage method to change background
+    /// </summary>
+    /// <param name="stringtoparse">argument file</param>
     public static void showImage(string stringtoparse)
     {
         var ImageToUse = new Regex(@"show (?<ImageFileName>[^.]+)");
@@ -107,8 +119,37 @@ public class InputDecoder : MonoBehaviour
         BackgroundImage.sprite = Resources.Load<Sprite>("Images/BackGrounds/" + ImageToShow);
     }
 
+    /// <summary>
+    /// Clean background
+    /// </summary>
     public static void ClearScreen()
     {
         BackgroundImage.sprite = null;
+    }
+
+    /// <summary>
+    /// Creates a character
+    /// </summary>
+    /// <param name="stringToParse">stringtoparse</param>
+    public static void CreateNewCharacter(string stringToParse)
+    {
+        Debug.Log("Sigo entrando");
+        string newCharname = null;
+        string newCharlongname = null;
+        Color newCharColor = Color.white;
+        string newCharimage = null;
+
+
+        string pattern = @"(\w+)(?:=(?:\w+|""[^""]*""))?";
+        MatchCollection matches = Regex.Matches(stringToParse, pattern);
+        Debug.Log("Mi primer argumentito es " + matches[0]);
+        Debug.Log("Mi seg argumentito es " + matches[1]);
+
+        newCharname = matches[1].ToString();
+        newCharlongname = matches[2].ToString();
+        newCharColor = Color.clear; ColorUtility.TryParseHtmlString(matches[3].ToString(), out newCharColor);
+        newCharimage = matches[4].ToString();
+        CharacterList.Add(new Character(newCharname, newCharlongname, newCharColor, newCharimage));
+
     }
 }
